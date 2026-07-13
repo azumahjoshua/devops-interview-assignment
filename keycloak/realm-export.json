@@ -1,0 +1,168 @@
+{
+  "realm": "acme",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "eventsEnabled": true,
+  "eventsListeners": [
+    "jboss-logging"
+  ],
+  "adminEventsEnabled": true,
+  "adminEventsDetailsEnabled": true,
+  "components": {
+    "org.keycloak.userprofile.UserProfileProvider": [
+      {
+        "providerId": "declarative-user-profile",
+        "config": {
+          "kc.user.profile.config": [
+            "{\"attributes\":[{\"name\":\"username\",\"displayName\":\"${username}\",\"validations\":{\"length\":{\"min\":3,\"max\":255},\"username-prohibited-characters\":{},\"up-username-not-idn-homograph\":{}},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"email\",\"displayName\":\"${email}\",\"validations\":{\"email\":{},\"length\":{\"max\":255}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"firstName\",\"displayName\":\"${firstName}\",\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false},{\"name\":\"lastName\",\"displayName\":\"${lastName}\",\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}},\"required\":{\"roles\":[\"user\"]},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\",\"user\"]},\"multivalued\":false}],\"groups\":[{\"name\":\"user-metadata\",\"displayHeader\":\"User metadata\",\"displayDescription\":\"Attributes, which refer to user metadata\"}],\"unmanagedAttributePolicy\":\"ENABLED\"}"
+          ]
+        }
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "user-cleanup-service",
+      "name": "User Cleanup Service Account",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "cleanup-secret-change-me",
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "implicitFlowEnabled": false,
+      "authorizationServicesEnabled": false,
+      "attributes": {
+        "access.token.lifespan": "300"
+      }
+    },
+    {
+      "clientId": "acme-portal",
+      "name": "ACME Portal (example public client)",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "http://localhost:3000/*"
+      ],
+      "webOrigins": [
+        "http://localhost:3000"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "9b7667a2-1e74-4d34-95af-988132b1875b",
+      "username": "alice",
+      "enabled": true,
+      "email": "alice@acme.local",
+      "emailVerified": true,
+      "firstName": "Alice",
+      "lastName": "User",
+      "credentials": [
+        { "type": "password", "value": "password", "temporary": false }
+      ]
+    },
+    {
+      "id": "a06ca1a9-daf8-4219-b8c0-311868309a29",
+      "username": "bob",
+      "enabled": true,
+      "email": "bob@acme.local",
+      "emailVerified": true,
+      "firstName": "Bob",
+      "lastName": "User",
+      "credentials": [
+        { "type": "password", "value": "password", "temporary": false }
+      ]
+    },
+    {
+      "id": "52bc2c45-c1cc-4c88-b354-af9fdae4c631",
+      "username": "carol",
+      "enabled": true,
+      "email": "carol@acme.local",
+      "emailVerified": true,
+      "firstName": "Carol",
+      "lastName": "User",
+      "credentials": [
+        { "type": "password", "value": "password", "temporary": false }
+      ]
+    },
+    {
+      "id": "8937fea5-08c7-45d9-82cb-86e36c426542",
+      "username": "dave",
+      "enabled": true,
+      "email": "dave@acme.local",
+      "emailVerified": true,
+      "firstName": "Dave",
+      "lastName": "User",
+      "credentials": [
+        { "type": "password", "value": "password", "temporary": false }
+      ]
+    },
+    {
+      "id": "6c175a9c-52ba-469b-b560-ca896225b20d",
+      "username": "eve",
+      "enabled": true,
+      "email": "eve@acme.local",
+      "emailVerified": true,
+      "firstName": "Eve",
+      "lastName": "User",
+      "credentials": [
+        { "type": "password", "value": "password", "temporary": false }
+      ]
+    },
+    {
+      "id": "8b45823d-a818-478d-9c70-592d168c249a",
+      "username": "frank",
+      "enabled": true,
+      "email": "frank@acme.local",
+      "emailVerified": true,
+      "firstName": "Frank",
+      "lastName": "User",
+      "credentials": [
+        { "type": "password", "value": "password", "temporary": false }
+      ]
+    },
+    {
+      "id": "61a7a5b6-8259-4e6a-a887-61c0f0fe6b03",
+      "username": "grace",
+      "enabled": true,
+      "email": "grace@acme.local",
+      "emailVerified": true,
+      "firstName": "Grace",
+      "lastName": "User",
+      "credentials": [
+        { "type": "password", "value": "password", "temporary": false }
+      ]
+    },
+    {
+      "id": "21b075dd-87f2-45fd-99a7-4e5b6d22d87c",
+      "username": "heidi",
+      "enabled": true,
+      "email": "heidi@acme.local",
+      "emailVerified": true,
+      "firstName": "Heidi",
+      "lastName": "User",
+      "credentials": [
+        { "type": "password", "value": "password", "temporary": false }
+      ]
+    },
+    {
+      "id": "6700192e-6778-4390-9c5c-dfc3f0398041",
+      "username": "break-glass",
+      "enabled": true,
+      "email": "break-glass@acme.local",
+      "emailVerified": true,
+      "firstName": "Break-glass",
+      "lastName": "User",
+      "credentials": [
+        { "type": "password", "value": "password", "temporary": false }
+      ]
+    }
+  ]
+}
