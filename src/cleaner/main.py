@@ -2,22 +2,88 @@
 
 Run with:
     python -m cleaner.main
-
-Suggested flow:
-    1. Load config from environment
-    2. Build a Keycloak client
-    3. List users, filter for stale ones (respect exclusions)
-    4. If dry-run, log the candidates. Otherwise, delete them.
-    5. Emit a summary (log line, metric, whatever fits your design)
 """
 
 import sys
+from dotenv import load_dotenv
+
+from cleaner.config import Config
+from cleaner.keycloak_client import KeycloakClient, KeycloakError
+from cleaner.policy import find_stale_users
 
 
 def main() -> int:
-    # TODO: implement
-    print("Not yet implemented.", file=sys.stderr)
-    return 1
+
+    try:
+        # Load .env file for local development
+        load_dotenv()
+
+        # Load configuration
+        config = Config.from_env()
+
+        # Create Keycloak client
+        client = KeycloakClient(
+            config.keycloak_url,
+            config.realm,
+            config.client_id,
+            config.client_secret,
+        )
+
+        # Retrieve all users
+        users = client.list_users()
+
+        # Apply cleanup policy
+        result = find_stale_users(users, config)
+
+        disabled = 0
+        failed = 0
+
+        if config.dry_run:
+            print("\n=== DRY RUN ===")
+
+            for user, reason in result.candidates:
+                print(
+                    f"[DRY RUN] Would disable "
+                    f"'{user['username']}' ({reason})"
+                )
+
+        else:
+            print("\n=== DISABLING USERS ===")
+
+            for user, reason in result.candidates:
+                try:
+                    client.disable_user(user)
+
+                    disabled += 1
+
+                    print(
+                        f"Disabled "
+                        f"'{user['username']}' ({reason})"
+                    )
+
+                except KeycloakError as exc:
+                    failed += 1
+
+                    print(
+                        f"Failed to disable "
+                        f"'{user['username']}': {exc}"
+                    )
+
+        print("\n========== SUMMARY ==========")
+        print(f"Users considered      : {result.considered}")
+        print(f"Excluded              : {result.excluded}")
+        print(f"Already disabled      : {result.skipped_disabled}")
+        print(f"Missing lastLogin     : {result.skipped_missing_login}")
+        print(f"Below threshold       : {result.below_threshold}")
+        print(f"Candidates            : {len(result.candidates)}")
+        print(f"Disabled              : {disabled}")
+        print(f"Failed                : {failed}")
+
+        return 0
+
+    except Exception as exc:
+        print(f"Fatal error: {exc}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":

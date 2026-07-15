@@ -26,3 +26,5 @@ dist/
 build/
 target/
 *.jar
+
+steps.md
