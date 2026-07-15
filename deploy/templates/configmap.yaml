@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+data:
+  KEYCLOAK_URL: {{ .Values.config.keycloakUrl | quote }}
+  KEYCLOAK_REALM: {{ .Values.config.realm | quote }}
+  KEYCLOAK_CLIENT_ID: {{ .Values.config.clientId | quote }}
+
+  INACTIVITY_DAYS: {{ .Values.config.inactivityDays | quote }}
+  DRY_RUN: {{ .Values.config.dryRun | quote }}
+
+  EXCLUSIONS: {{ join "," .Values.config.exclusions | quote }}

@@ -1,0 +1,11 @@
+.git
+.gitignore
+.venv
+__pycache__/
+*.pyc
+deploy/
+kind/
+steps.md
+README.md
+FEEDBACK.md
+.env

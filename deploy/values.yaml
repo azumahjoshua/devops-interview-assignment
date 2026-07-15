@@ -1,0 +1,40 @@
+image:
+  repository: keycloak-user-cleanup
+  tag: dev
+  pullPolicy: IfNotPresent
+
+container:
+  name: keycloak-user-cleanup
+
+command:
+  - python
+  - -m
+  - cleaner.main
+
+schedule: "0 2 * * *"
+
+config:
+  keycloakUrl: "http://keycloak:8080"
+  realm: "acme"
+  clientId: "user-cleanup-service"
+  inactivityDays: 120
+  dryRun: true
+  exclusions:
+    - admin
+    - break-glass
+
+secret:
+  existingSecret: keycloak-cleanup-secret
+  clientSecretKey: client-secret
+
+serviceAccount:
+  create: true
+  name: keycloak-user-cleanup
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 250m
+    memory: 256Mi
